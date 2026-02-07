@@ -179,6 +179,42 @@ void mdp_set_xrgb8888(struct fbcon_config *fb)
 	fb->format = FB_FORMAT_RGB888;
 }
 
+void mdp_set_flip(struct fbcon_config *fb, uint32_t flip_bits)
+{
+	const struct mdp_pipe *pipe;
+
+	if (!fb)
+		return;
+
+	pipe = mdp_find_pipe(fb);
+	if (!pipe) {
+		dprintf(CRITICAL, "MDP: Cannot find pipe for flip\n");
+		return;
+	}
+
+#if MDP4
+	dprintf(INFO, "%s: Not implemented for MDP4.\n", __func__);
+	return;
+#elif MDP5
+	uint32_t op_mode = readl(pipe->base + PIPE_SSPP_SRC_OP_MODE);
+
+	dprintf(INFO, "MDP: Pipe %s, original op_mode=%#x, setting flip=%#x\n",
+		pipe->name, op_mode, flip_bits);
+
+	/* Clear existing flip bits and set new ones */
+	op_mode &= ~(MDSS_MDP_OP_MODE_FLIP_LR | MDSS_MDP_OP_MODE_FLIP_UD);
+	op_mode |= flip_bits;
+
+	writel(op_mode, pipe->base + PIPE_SSPP_SRC_OP_MODE);
+
+	/* Flush all pipes to ensure the change takes effect */
+	writel(0x3F, MDP_CTL_0_BASE + CTL_FLUSH);
+
+	dprintf(INFO, "MDP: Set flip bits to %#x, new op_mode=%#x\n",
+		flip_bits, readl(pipe->base + PIPE_SSPP_SRC_OP_MODE));
+#endif
+}
+
 void mdp_relocate(struct fbcon_config *fb, void *target)
 {
 	const struct mdp_pipe *pipe;

@@ -6,9 +6,11 @@
 #include <platform.h>
 #include <platform/clock.h>
 #include <reg.h>
+#include <string.h>
 #include <target.h>
 
 #include <lk2nd/util/mmu.h>
+#include "../../device/device.h"
 
 #include "cont-splash.h"
 
@@ -57,6 +59,10 @@ static bool mdp_setup_cont_splash(void)
 	}
 	if (!mdp_prepare_fb(&fb) || !mdp_setup_refresh(&fb))
 		return false;
+
+	/* Fix reversal display issue on ASUS Z016D */
+	if (lk2nd_dev.compatible && !strcmp(lk2nd_dev.compatible, "asus,z016d"))
+		mdp_set_flip(&fb, MDSS_MDP_OP_MODE_FLIP_LR | MDSS_MDP_OP_MODE_FLIP_UD);
 
 	fbcon_setup(&fb);
 	return true;
