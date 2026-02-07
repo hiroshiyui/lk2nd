@@ -194,6 +194,7 @@
 
 ### lk2nd-msm8996
 
+- ASUS Zenfone 3 Deluxe (Z016D/ZS570KL)
 - LG G5 - h850
 - LG V20 - h990
 - OnePlus 3T
