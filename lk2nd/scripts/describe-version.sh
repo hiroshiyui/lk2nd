@@ -25,16 +25,16 @@ get_version_string() {
 	fi
 
 	head_rev=$(git rev-parse --short HEAD)
-	head_date=$(git log -1 --format=%cd --date=format:"%Y%m%d")
-	last_tag=$(git tag --sort=-taggerdate --merged | head -n1)
+	head_date=$(git log -1 --no-show-signature --format=%cd --date=format:"%Y%m%d" 2>/dev/null)
+	last_tag=$(git tag --sort=-taggerdate --merged 2>/dev/null | head -n1)
 	if [ -z "$last_tag" ]
 	then
 		echo "next-$head_rev-$head_date$(git_dirty)"
 		return
 	fi
 
-	last_tag_ref=$(git rev-list -n1 "$last_tag")
-	if [ "$last_tag_ref" = "$(git rev-list -n1 HEAD)" ]
+	last_tag_ref=$(git rev-list -n1 "$last_tag" 2>/dev/null)
+	if [ "$last_tag_ref" = "$(git rev-list -n1 HEAD 2>/dev/null)" ]
 	then
 		echo "$last_tag$(git_dirty)"
 		return
