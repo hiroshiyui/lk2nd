@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: BSD-3-Clause
+
+#include <skeleton64.dtsi>
+#include <lk2nd.dtsi>
+
+/ {
+	qcom,msm-id = <QCOM_ID_MSM8996 0x30001>;
+	qcom,board-id = <0x52 0x00>;
+	qcom,pmic-id = <0x20009 0x10013 0x00 0x00>;
+};
+
+&lk2nd {
+	model = "ASUS Z016D";
+	compatible = "asus,z016d";
+	lk2nd,match-cmdline = "*PRJ_ID=7*RF_SKU=0*HW_ID=15*";
+
+	gpio-keys {
+		compatible = "gpio-keys";
+
+		volume-up {
+			lk2nd,code = <KEY_VOLUMEUP>;
+			gpios = <&tlmm 50 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+		};
+
+		volume-down {
+			lk2nd,code = <KEY_VOLUMEDOWN>;
+			gpios = <&tlmm 73 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+		};
+	};
+};

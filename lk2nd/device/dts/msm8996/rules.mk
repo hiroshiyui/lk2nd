@@ -10,3 +10,4 @@ ADTBS += \
 	$(LOCAL_DIR)/msm8996-xiaomi-mi5s.dtb \
 	$(LOCAL_DIR)/msm8996-xiaomi-mi5s-plus.dtb \
 	$(LOCAL_DIR)/msm8996-zte-axon7.dtb \
+	$(LOCAL_DIR)/msm8996-asus-z016d.dtb \
